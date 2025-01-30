@@ -32,6 +32,15 @@ jobs:
           dotnet restore ./src/Todo.Api.sln
           dotnet build --no-restore ./src/Todo.Api.sln
 
+      - name: Test .Net Project
+        run: dotnet test ./src/Todo.Api.sln --no-restore --no-build --logger trx --results-directory "TestResults"
+
+      - name: Upload .Net Test Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -44,21 +53,3 @@ jobs:
         run: | 
           npm install
           npm run build
-
-  test:
-    name: Test .Net Project
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up .Net Core
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.x
-      
-      - name: Test .Net Project
-        run: dotnet test ./src/api.tests/Todo.Api.Tests.csproj
-
-
