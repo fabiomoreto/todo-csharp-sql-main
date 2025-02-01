@@ -12,12 +12,30 @@ on:
   workflow_dispatch:
 
 jobs:
+  
+  versioning:
+    name: Versioning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Git Version
+        uses: codacy/git-version@2.8.0
+        with:
+          release-branch: main
+          prefix: v
+  
   build:
     name: Build Project
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Set up .Net Core
