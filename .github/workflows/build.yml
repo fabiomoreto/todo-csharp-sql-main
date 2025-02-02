@@ -24,13 +24,20 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
+      - name: Check Token Permissions
+        run: |
+          echo "Token permissions:"
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                -H "Accept: application/vnd.github.v3+json" \
+                https://api.github.com/repos/${{ github.repository }}/actions/permissions
+
       - name: Git Version
         id: version
         uses: codacy/git-version@2.8.0
         with:
           release-branch: main
           prefix: v
-          
+
   build:
     name: Build Project
     runs-on: ubuntu-latest
