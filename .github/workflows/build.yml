@@ -61,10 +61,10 @@ jobs:
         run: dotnet restore ./src/Todo.Api.sln
 
       - name: Build
-        run: dotnet build --no-restore Release ./src/Todo.Api.sln
+        run: dotnet build --no-restore ./src/Todo.Api.sln --configuration Release
 
       - name: Test
-        run: dotnet test ./src/Todo.Api.sln --no-restore --no-build Release --logger trx --results-directory "TestResults"
+        run: dotnet test ./src/Todo.Api.sln --no-restore --no-build --configuration Release --logger trx --results-directory "TestResults"
 
       - name: Upload .Net Test Artifact
         uses: actions/upload-artifact@v4
