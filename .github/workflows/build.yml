@@ -12,7 +12,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  
   versioning:
     name: Versioning
     runs-on: ubuntu-latest
@@ -42,8 +41,9 @@ jobs:
           git push --tags
         if: github.ref == 'refs/heads/main'
 
-  build:
-    name: Build Project
+  backend-build-test:
+    needs: versioning
+    name: Build And Test Backend Project
     runs-on: ubuntu-latest
 
     steps:
@@ -56,14 +56,15 @@ jobs:
           dotnet-version: 8.x
           cache: true
           cache-dependency-path: './src/**/packages.lock.json'
-      
-      - name: Build .Net Project
-        run: |
-          dotnet restore ./src/Todo.Api.sln
-          dotnet build --no-restore ./src/Todo.Api.sln
 
-      - name: Test .Net Project
-        run: dotnet test ./src/Todo.Api.sln --no-restore --no-build --logger trx --results-directory "TestResults"
+      - name: Restore
+        run: dotnet restore ./src/Todo.Api.sln
+
+      - name: Build
+        run: dotnet build --no-restore Release ./src/Todo.Api.sln
+
+      - name: Test
+        run: dotnet test ./src/Todo.Api.sln --no-restore --no-build Release --logger trx --results-directory "TestResults"
 
       - name: Upload .Net Test Artifact
         uses: actions/upload-artifact@v4
@@ -71,15 +72,24 @@ jobs:
           name: test-results
           path: TestResults
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: npm
-          cache-dependency-path: ./src/web
+  frontend-build-test:
+      needs: versioning
+      name: Build And Test Frontend Project
+      runs-on: ubuntu-latest
 
-      - name: Install dependencies
-        working-directory: ./src/web
-        run: | 
-          npm install
-          npm run build
+      steps:
+        - name: Checkout Code
+          uses: actions/checkout@v4
+
+        - name: Set up Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: '20'
+            cache: npm
+            cache-dependency-path: ./src/web
+
+        - name: Install dependencies
+          working-directory: ./src/web
+          run: | 
+            npm install
+            npm run build
