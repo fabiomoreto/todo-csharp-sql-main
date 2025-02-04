@@ -76,6 +76,9 @@ jobs:
       needs: versioning
       name: Build And Test Frontend Project
       runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: ./src/web
 
       steps:
         - name: Checkout Code
@@ -89,7 +92,10 @@ jobs:
             cache-dependency-path: ./src/web
 
         - name: Install dependencies
-          working-directory: ./src/web
-          run: | 
-            npm install
-            npm run build
+          run: npm ci
+          
+        - name: Test
+          run: npm run lint
+
+        - name: Build
+          run: npm run build
