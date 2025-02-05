@@ -151,8 +151,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Run Dependency Check
-        uses: actions/dependency-review-action@v4
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+    if: github.ref != 'refs/heads/main'
