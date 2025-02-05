@@ -156,3 +156,4 @@ jobs:
 
       - name: Run Dependency Check
         uses: actions/dependency-review-action@v4
+        uses: actions/dependency-review-action@v4
