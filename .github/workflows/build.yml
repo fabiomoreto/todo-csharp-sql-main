@@ -146,11 +146,16 @@ jobs:
     if: github.ref != 'refs/heads/main'
 
   dependency-check:
-    needs: versioning
     name: Dependency Check
+    needs: versioning
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/dependency-review-action@v4
+        with:
+          comment-summary-in-pr: always
     if: github.ref != 'refs/heads/main'
