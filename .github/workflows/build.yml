@@ -144,3 +144,15 @@ jobs:
       - name: Test
         run: npm run lint
     if: github.ref != 'refs/heads/main'
+
+  dependency-check:
+    needs: versioning
+    name: Dependency Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Dependency Check
+        uses: actions/dependency-review-action@v4
