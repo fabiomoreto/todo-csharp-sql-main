@@ -157,6 +157,6 @@ jobs:
 
       - name: Info
         run:
-          echo base_ref ${{ github.base_ref.sha }}
-          echo head_ref ${{ github.head_ref.sha }}
+          echo "base_ref ${{ github.base_ref.sha }}"
+          echo "head_ref ${{ github.head_ref.sha }}"
     if: github.ref != 'refs/heads/main'
