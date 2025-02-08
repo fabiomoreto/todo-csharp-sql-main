@@ -230,14 +230,18 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t todo-app:${{ env.version }} .
+          docker build -t fabiomoreto/todo-app:${{ env.version }} .
 
       - name: Tag Docker image as Latest
         run: |
-          docker tag todo-app:${{ env.version }} todo-app:latest
+          docker tag fabiomoreto/todo-app:${{ env.version }} fabiomoreto/todo-app:latest
 
       - name: Docker Login
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker Push
+        run: |
+          docker push --all-tags fabiomoreto/todo-app
