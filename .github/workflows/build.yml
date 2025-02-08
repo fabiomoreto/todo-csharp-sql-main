@@ -230,11 +230,12 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t fabiomoreto/todo-app:${{ env.version }} .
+          docker build -t ${{ vars.DOCKERHUB_REPOSITORY }}:${{ env.version }} .
 
       - name: Tag Docker image as Latest
         run: |
-          docker tag fabiomoreto/todo-app:${{ env.version }} fabiomoreto/todo-app:latest
+          docker tag ${{ vars.DOCKERHUB_REPOSITORY }}:${{ env.version }} ${{ vars.DOCKERHUB_REPOSITORY }}:latest
+        if: github.ref == 'refs/heads/main'
 
       - name: Docker Login
         uses: docker/login-action@v3
@@ -244,4 +245,4 @@ jobs:
 
       - name: Docker Push
         run: |
-          docker push --all-tags fabiomoreto/todo-app
+          docker push --all-tags ${{ vars.DOCKERHUB_REPOSITORY }}
